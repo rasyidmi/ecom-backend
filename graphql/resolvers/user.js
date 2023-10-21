@@ -1,9 +1,8 @@
-const User = require("../../database/user");
-const Seller = require("../../database/seller");
+const User = require("../../models/user");
+const Seller = require("../../models/seller");
 
 const { encryptPassword, decryptPassword } = require("../../services/crpyto");
 const jwt = require("../../services/jwt");
-const seller = require("../../database/seller");
 
 class UserResolver {
   static createUser = async (obj, args, context, info) => {
@@ -84,7 +83,7 @@ class UserResolver {
     return { _id: user._id, email: user.email, token: token };
   };
 
-  static verifyEmail = async (obj, args, context, info) => {
+  static sendVerifyEmail = async (obj, args, context, info) => {
     
   };
 }
