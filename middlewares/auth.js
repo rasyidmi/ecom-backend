@@ -7,25 +7,25 @@ const apiKeyAuth = async (req, res, next) => {
       return res.status(401).json({ message: "Wrong api key." });
     next();
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
 
-const loginAuth = async (req) => {
+const loginAuth = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      return;
+      return res.status(401).json({ message: "No Token" });
     }
     if (!authHeader.startsWith("Bearer ")) {
-      return;
+      return res.status(401).json({ message: "Invalid Token" });
     }
     const payload = tokenExtraction(authHeader);
-    if (!payload) return;
-    return { user: { _id: payload._id, email: payload.email } };
+    if (!payload) return res.status(401).json({ message: "Invalid Token" });
+    req.user = { email: payload.email, id: payload.id };
+    next();
   } catch (error) {
-    return;
+    next(error);
   }
 };
 

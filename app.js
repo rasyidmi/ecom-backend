@@ -4,20 +4,27 @@ const cors = require("cors");
 
 const graphqlSchema = require("./graphql/schema");
 const graphqlResolver = require("./graphql/resolvers");
-const { apiKeyAuth, loginAauth } = require("./middlewares/auth");
-const { verifyEmail } = require("./rest/controllers/verify_email");
+const { loginAauth } = require("./middlewares/auth");
+const userRouter = require("./rest/routes/user_route");
+const { verifyToken } = require("./services/jwt");
+const { errorHandler } = require("./middlewares/error_handler");
 
 const app = express();
 app.use(cors());
-app.get("/confirm/:tokenId/:token", verifyEmail);
-app.use(apiKeyAuth);
-// app.use(loginAauth);
+app.use(userRouter);
+app.use(loginAauth);
+app.use(errorHandler);
 app.all(
   "/graphql",
   createHandler({
     schema: graphqlSchema,
     rootValue: graphqlResolver,
-    context: loginAauth,
+    context: async (req) => {
+      const authHeader = req.headers.authorization;
+      const token = authHeader.substring(7, authHeader.length);
+      const payload = verifyToken(token);
+      return { user: { id: payload.id, email: payload.email } };
+    },
   })
 );
 

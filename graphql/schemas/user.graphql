@@ -10,14 +10,3 @@ type VerifyEmailToken {
   email: String!
   expiredDate: String!
 }
-
-input RegisterInputData {
-  name: String!
-  email: String!
-  password: String!
-}
-
-input LoginInputData {
-  email: String!
-  password: String!
-}
