@@ -17,8 +17,7 @@ exports.decryptPassword = (encryptedPassword) => {
   return password;
 };
 
-exports.decryptVerifyEmailToken = (value) => {
-  const bytes = CryptoJS.AES.decrypt(value, process.env.PASSWORD_KEY);
-  const decryptedValue = bytes.toString(CryptoJS.enc.Utf8);
-  return decryptedValue;
+exports.generateToken = () => {
+  const token = CryptoJS.lib.WordArray.random(32).toString();
+  return token;
 };

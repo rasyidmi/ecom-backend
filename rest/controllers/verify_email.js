@@ -1,47 +1,52 @@
+const mongoose = require("mongoose");
+const moment = require("moment");
+
 const User = require("../../models/user");
 const Seller = require("../../models/seller");
+const VerifyEmailToken = require("../../models/verify_email_token");
 
-const { decryptVerifyEmailToken } = require("../../services/crpyto");
-const { verifyToken } = require("../../services/jwt");
-
-const verifyEmailController = async (req, res, next) => {
+const verifyEmail = async (req, res, next) => {
   try {
-    const authHeader = req.header("authorization");
-    if (!authHeader) return res.status(401).json({ message: "No Token" });
-    if (!authHeader.startsWith("Bearer "))
-      return res.status(401).json({ message: "Invalid Token" });
-
-    const jwtToken = authHeader.substring(7, authHeader.length);
-    const jwtPayload = verifyToken(jwtToken);
-    if (!jwtPayload) return res.status(401).json({ message: "Invalid Token" });
-
     // Decrypt mail token.
-    const emailToken = req.params.token;
-    const token = decryptVerifyEmailToken(emailToken);
-    const tokenPayload = verifyToken(token);
-    if (!tokenPayload)
-      return res.status(401).json({ message: "Token expired" });
-    const email = tokenPayload.email;
+    const token = req.params.token;
+    const tokenId = req.params.tokenId;
+    // Check expired or not
+    const data = await VerifyEmailToken.findOne({
+      token: token,
+      _id: new mongoose.Types.ObjectId(tokenId),
+    });
+    if (!data) {
+      return res.status(404).json({ message: "Data not found." });
+    }
+    if (moment().isAfter(data.expiredDate)) {
+      return res.status(400).json({ message: "Token expired." });
+    }
     // Try to get the user
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: data.email });
     if (user) {
-      await User.updateOne({ email: email }, { $set: { isVerified: true } });
+      await User.updateOne(
+        { email: data.email },
+        { $set: { isVerified: true } }
+      );
       return res
         .status(200)
         .json({ message: "Email verified, check your account." });
     }
-    const seller = await Seller.findOne({ email: email });
+    const seller = await Seller.findOne({ email: data.email });
     if (seller) {
-      await Seller.updateOne({ email: email }, { $set: { isVerified: true } });
+      await Seller.updateOne(
+        { email: data.email },
+        { $set: { isVerified: true } }
+      );
       return res
         .status(200)
         .json({ message: "Email verified, check your account." });
     }
-    return res.status(404).json({ message: "Email not found." });
+    return res.status(404).json({ message: "User not found." });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal server error." });
   }
 };
 
-exports.module = verifyEmailController;
+exports.verifyEmail = verifyEmail;

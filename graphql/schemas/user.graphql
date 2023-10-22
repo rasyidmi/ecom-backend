@@ -6,6 +6,11 @@ type User {
   token: String
 }
 
+type VerifyEmailToken {
+  email: String!
+  expiredDate: String!
+}
+
 input RegisterInputData {
   name: String!
   email: String!

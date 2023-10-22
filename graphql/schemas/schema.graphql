@@ -1,6 +1,7 @@
 #import User from "user.graphql"
 #import RegisterInputData from "user.graphql"
 #import LoginInputData from "user.graphql"
+#import VerifyEmailToken from "user.graphql"
 
 type Query {
   login: User!
@@ -11,4 +12,5 @@ type Mutation {
   login(data: LoginInputData): User!
   createSeller(data: RegisterInputData): User!
   loginSeller(data: LoginInputData): User!
+  sendVerifyEmail: VerifyEmailToken!
 }

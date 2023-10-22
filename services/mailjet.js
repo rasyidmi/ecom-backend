@@ -5,7 +5,12 @@ const mailjet = new Mailjet({
   apiSecret: process.env.MJ_SECRET_KEY,
 });
 
-const sendVerifyAccountEmail = (receiverName, receiverEmail, token) => {
+const sendVerifyAccountEmail = (
+  receiverName,
+  receiverEmail,
+  token,
+  tokenId
+) => {
   const request = mailjet.post("send", { version: "v3.1" }).request({
     Messages: [
       {
@@ -15,25 +20,27 @@ const sendVerifyAccountEmail = (receiverName, receiverEmail, token) => {
         },
         To: [
           {
-            Email: "receiverEmail",
-            Name: "receiverName",
+            Email: `${receiverEmail}`,
+            Name: `${receiverName}`,
           },
         ],
-        Subject: "Verify your Rasyid Ecom Account",
-        TextPart:
-          "",
-        HTMLPart:
-          '<h3>Dear passenger 1, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!</h3><br />May the delivery force be with you!',
+        TemplateID: 5205367,
+        TemplateLanguage: true,
+        Variables: {
+          confirmation_link: `http://localhost:3000/confirm/${tokenId}/${token}`,
+          receiver_name: receiverName,
+        },
       },
     ],
   });
 
   request
     .then((result) => {
-      console.log(result.body);
+      console.log("Sending verification email.");
     })
     .catch((err) => {
-      console.log(err.statusCode);
+      console.log(err);
+      throw new Error("Sending email failed.");
     });
 };
 

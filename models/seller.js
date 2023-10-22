@@ -9,4 +9,4 @@ const sellerSchema = new Schema({
   products: [{ type: Schema.Types.ObjectId, ref: 'Product' }]
 });
 
-module.exports = mongoose.model("Seller", sellerSchema);
+module.exports = mongoose.model("seller", sellerSchema);
