@@ -1,7 +1,22 @@
 #import User from "user.graphql"
 #import VerifyEmailToken from "user.graphql"
-#import GetUserInputData from "user.graphql"
+#import UpdateInputData from "user.graphql"
+#import Product from "product.graphql"
+#import CreateProductData from "product.graphql"
+#import UpdateProductData from "product.graphql"
+
+type Query {
+  currentUser: User!
+  getProduct(id: ID!): Product!
+  getProductsBySeller(sellerId: ID!): [Product]
+  getAllProducts: [Product]
+}
 
 type Mutation {
+  updateUser(data: UpdateInputData!): User!
+  topUp(amount: Int!): User!
   sendVerifyEmail: VerifyEmailToken!
+  createProduct(data: CreateProductData!): Product!
+  deleteProduct(id: ID!): String!
+  updateProduct(data: UpdateProductData!): Product!
 }

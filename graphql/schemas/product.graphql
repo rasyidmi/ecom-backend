@@ -1,0 +1,20 @@
+type Product {
+  id: ID!
+  name: String!
+  price: Int!
+  quantity: Int!
+  ownerId: ID!
+}
+
+input CreateProductData {
+  name: String!
+  price: Int!
+  quantity: Int
+}
+
+input UpdateProductData {
+  id: ID!
+  name: String
+  price: Int
+  quantity: Int
+}
