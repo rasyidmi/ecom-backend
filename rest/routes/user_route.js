@@ -6,7 +6,6 @@ const SellerController = require("../controllers/seller_controller");
 const { apiKeyAuth, loginAauth } = require("../../middlewares/auth");
 const { uploadUserImage } = require("../../middlewares/aws_s3");
 
-router.use(express.json());
 router.get("/confirm/:tokenId/:token", UserController.verifyEmail);
 router.use(apiKeyAuth);
 router.post("/login", UserController.login);
@@ -17,14 +16,15 @@ router.post(
   uploadUserImage,
   SellerController.sellerRegister
 );
-router.use(loginAauth);
 router.put(
   "/user/update-image",
+  loginAauth,
   uploadUserImage,
   UserController.updateUserImage
 );
 router.put(
   "/seller/update-image",
+  loginAauth,
   uploadUserImage,
   SellerController.updateSellerImage
 );

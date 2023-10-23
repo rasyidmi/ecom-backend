@@ -22,11 +22,22 @@ const loginAuth = async (req, res, next) => {
     }
     const payload = tokenExtraction(authHeader);
     if (!payload) return res.status(401).json({ message: "Invalid Token" });
-    req.user = { email: payload.email, id: payload.id };
+    req.user = {
+      email: payload.email,
+      id: payload.id,
+      isSeller: payload.isSeller,
+    };
     next();
   } catch (error) {
     next(error);
   }
+};
+
+const sellerAuth = async (req, res, next) => {
+  if (!req.user.isSeller) {
+    return res.status(401).json({ message: "You are not a seller" });
+  }
+  next();
 };
 
 function tokenExtraction(bearerToken) {
@@ -37,3 +48,4 @@ function tokenExtraction(bearerToken) {
 
 exports.apiKeyAuth = apiKeyAuth;
 exports.loginAauth = loginAuth;
+exports.sellerAuth = sellerAuth;

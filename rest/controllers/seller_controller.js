@@ -2,7 +2,7 @@ var validator = require("validator");
 
 const User = require("../../models/user");
 const Seller = require("../../models/seller");
-const { decryptPassword } = require("../../services/crpyto");
+const { decryptPassword, encryptPassword } = require("../../services/crpyto");
 const jwt = require("../../services/jwt");
 const { awsDeleteFile } = require("../../services/aws_s3");
 
@@ -53,7 +53,7 @@ class SellerController {
         return res.status(400).json({ message: "Wrong password" });
       }
       // Create JWT.
-      const token = jwt.signJwt({ id: user._id, email: email });
+      const token = jwt.signJwt({ id: user._id, email: email, isSeller: true });
 
       return res.status(200).json({
         message: "Success login.",

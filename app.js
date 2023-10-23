@@ -4,16 +4,19 @@ const cors = require("cors");
 
 const graphqlSchema = require("./graphql/schema");
 const graphqlResolver = require("./graphql/resolvers");
-const { loginAauth } = require("./middlewares/auth");
 const userRouter = require("./rest/routes/user_route");
+const productRouter = require("./rest/routes/product_route");
 const { verifyToken } = require("./services/jwt");
 const { errorHandler } = require("./middlewares/error_handler");
+const { loginAauth } = require("./middlewares/auth");
 
 const app = express();
+
+app.use(express.json());
 app.use(cors());
 app.use(userRouter);
+app.use("/product", productRouter);
 app.use(loginAauth);
-app.use(errorHandler);
 app.all(
   "/graphql",
   createHandler({
@@ -27,5 +30,6 @@ app.all(
     },
   })
 );
+app.use(errorHandler);
 
 module.exports = app;

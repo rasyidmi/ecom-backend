@@ -8,7 +8,7 @@ const s3 = new S3Client({
     accessKeyId: process.env.AWS_ACCESS_KEY,
     secretAccessKey: process.env.AWS_SECRET_KEY,
   },
-  region: "ap-southeast-2"
+  region: "ap-southeast-2",
 });
 
 const uploadUserImage = multer({
@@ -40,6 +40,35 @@ const uploadUserImage = multer({
   },
 }).single("image");
 
+const uploadProductImages = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: "ecomapp-bucket",
+    acl: "public-read",
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      req.errorStatus = 0;
+      const fileName = `product-images/${req.body.id}/${Date.now().toString()}${path.extname(
+        file.originalname
+      )}`;
+      cb(null, fileName);
+      console.log(`INFO: Object succesfully uploaded to S3 Bucket ${fileName}`);
+    },
+    limits: { fileSize: 5000000 },
+    fileFilter: function (req, file, cb) {
+      if (!checkFileIsImage(file)) {
+        console.log("Error: Images only!");
+        req.errorStatus = 1;
+        cb(null);
+        return;
+      }
+      cb(null, true);
+    },
+  }),
+}).array("images");
+
 function checkFileIsImage(file) {
   // Allowed ext
   const filetypes = /jpeg|jpg|png/;
@@ -55,3 +84,4 @@ function checkFileIsImage(file) {
 }
 
 exports.uploadUserImage = uploadUserImage;
+exports.uploadProductImages = uploadProductImages;

@@ -67,7 +67,11 @@ class UserController {
         return res.status(400).json({ message: "Wrong password" });
       }
       // Create JWT.
-      const token = jwt.signJwt({ id: user._id, email: email });
+      const token = jwt.signJwt({
+        id: user._id,
+        email: email,
+        isSeller: false,
+      });
 
       return res.status(200).json({
         message: "Success login.",
