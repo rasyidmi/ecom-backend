@@ -4,10 +4,14 @@ const { awsDeleteFile } = require("../../services/aws_s3");
 class ProductController {
   static async uploadImages(req, res, next) {
     try {
+      const userId = req.user.id;
       const files = req.files;
       const productId = req.body.id;
       const product = await Product.findById(productId);
 
+      if (userId != product.ownerId) {
+        return res.status(401).json({ message: "You are not the seller" });
+      }
       const images = [];
       files.forEach((file) => {
         images.push(file.location);

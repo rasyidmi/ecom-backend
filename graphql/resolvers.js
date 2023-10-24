@@ -9,6 +9,7 @@ const resolvers = {
   createProduct: ProductResolver.createProduct,
   getProduct: ProductResolver.getProductById,
   getProductsBySeller: ProductResolver.getProductBySeller,
+  getSellerProduct: ProductResolver.getSellerProduct,
   getAllProducts: ProductResolver.getAllProducts,
   deleteProduct: ProductResolver.deleteProduct,
   updateProduct: ProductResolver.updateProduct,

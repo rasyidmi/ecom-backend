@@ -49,6 +49,17 @@ class ProductResolver {
     return products;
   };
 
+  // Get current login seller products.
+  static getSellerProduct = async (obj, args, context, info) => {
+    const sellerId = args.user.id;
+
+    const products = await Product.find({
+      ownerId: new mongoose.Types.ObjectId(sellerId),
+    });
+
+    return products;
+  };
+
   static getAllProducts = async (obj, args, context, info) => {
     const products = await Product.find();
     return products;

@@ -9,6 +9,7 @@ type Query {
   currentUser: User!
   getProduct(id: ID!): Product!
   getProductsBySeller(sellerId: ID!): [Product]
+  getSellerProduct: [Product]
   getAllProducts: [Product]
 }
 

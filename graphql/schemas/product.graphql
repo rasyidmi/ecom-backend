@@ -4,6 +4,7 @@ type Product {
   price: Int!
   quantity: Int!
   ownerId: ID!
+  images: [String]
 }
 
 input CreateProductData {
