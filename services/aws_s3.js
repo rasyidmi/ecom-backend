@@ -11,12 +11,14 @@ const s3 = new S3Client({
 
 const deleteFile = async (fileUrl, folderName) => {
   const fileName = path.basename(fileUrl);
+  const key = `${folderName}/${fileName}`;
   const command = new DeleteObjectCommand({
     Bucket: "ecomapp-bucket",
-    Key: `${folderName}/${fileName}`,
+    Key: key,
   });
 
   const response = await s3.send(command);
+  console.log(response);
 };
 
 exports.awsDeleteFile = deleteFile;
