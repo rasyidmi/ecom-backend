@@ -61,8 +61,20 @@ class ProductResolver {
   };
 
   static getAllProducts = async (obj, args, context, info) => {
-    const products = await Product.find();
-    return products;
+    if (obj.page <= 0 || obj.size <= 0)
+      throw new Error("Page or Size must be more than zero.");
+    const limit = obj.size;
+    const skip = limit * (obj.page - 1);
+    const products = await Product.find()
+      .sort({ name: "asc" })
+      .limit(limit)
+      .skip(skip);
+    const totalProducts = await Product.countDocuments();
+    return {
+      products: products,
+      total: totalProducts,
+      currentTotal: products.length,
+    };
   };
 
   static deleteProduct = async (obj, args, context, info) => {

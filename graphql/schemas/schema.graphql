@@ -1,16 +1,12 @@
-#import User from "user.graphql"
-#import VerifyEmailToken from "user.graphql"
-#import UpdateInputData from "user.graphql"
-#import Product from "product.graphql"
-#import CreateProductData from "product.graphql"
-#import UpdateProductData from "product.graphql"
+#import User, VerifyEmailToken, UpdateInputData from "user.graphql"
+#import Product, UpdateProductData, ProductsPaginated, CreateProductData from "product.graphql"
 
 type Query {
   currentUser: User!
   getProduct(id: ID!): Product!
   getProductsBySeller(sellerId: ID!): [Product]
   getSellerProduct: [Product]
-  getAllProducts: [Product]
+  getAllProducts(page: Int!, size: Int!): ProductsPaginated!
 }
 
 type Mutation {

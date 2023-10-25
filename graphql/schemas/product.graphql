@@ -7,6 +7,12 @@ type Product {
   images: [String]
 }
 
+type ProductsPaginated {
+  products: [Product]
+  total: Int!
+  currentTotal: Int!
+}
+
 input CreateProductData {
   name: String!
   price: Int!
