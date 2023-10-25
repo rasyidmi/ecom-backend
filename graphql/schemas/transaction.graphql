@@ -21,6 +21,6 @@ input BuyProductData {
 
 enum TransactionStatus {
   RECEIVED
-  COPMLETED
+  COMPLETED
   FAILED
 }

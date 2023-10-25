@@ -15,6 +15,7 @@ const resolvers = {
   deleteProduct: ProductResolver.deleteProduct,
   updateProduct: ProductResolver.updateProduct,
   buyProduct: TransactionResolver.buyProduct,
+  acceptBuyProduct: TransactionResolver.acceptBuyProduct,
 };
 
 module.exports = resolvers;

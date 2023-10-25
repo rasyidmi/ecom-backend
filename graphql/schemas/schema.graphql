@@ -18,5 +18,5 @@ type Mutation {
   deleteProduct(id: ID!): String!
   updateProduct(data: UpdateProductData!): Product!
   buyProduct(data: BuyProductData!): ProductTransaction!
-  confirmBuyProduct(productId: ID!): ProductTransaction!
+  acceptBuyProduct(transactionId: ID!): ProductTransaction!
 }
