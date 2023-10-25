@@ -4,6 +4,7 @@ const User = require("../../models/user");
 const Seller = require("../../models/seller");
 const Product = require("../../models/product");
 const ProductTransaction = require("../../models/product_transaction");
+const TopUpTransaction = require("../../models/topup_transaction");
 
 class TransactionResolver {
   static buyProduct = async (obj, args, context, info) => {
@@ -57,6 +58,26 @@ class TransactionResolver {
     await product.save();
 
     return updatedTransaction;
+  };
+
+  static topUp = async (obj, args, context, info) => {
+    const userId = args.user.id;
+    const topUpAmount = obj.amount;
+    let user;
+    user = await User.findById(userId);
+    if (!user) user = await Seller.findById(userId);
+    if (!user) throw new Error("User not found.");
+    // TODO: implement payment gateway
+    user.wallet = user.wallet + topUpAmount;
+    const topUpTransaction = new TopUpTransaction({
+      userId: user._id,
+      amount: topUpAmount,
+      status: "COMPLETED",
+    });
+    user = await user.save();
+    const transactionDoc = await topUpTransaction.save();
+
+    return transactionDoc;
   };
 }
 

@@ -1,6 +1,6 @@
 #import User, VerifyEmailToken, UpdateInputData from "user.graphql"
 #import Product, UpdateProductData, ProductsPaginated, CreateProductData from "product.graphql"
-#import ProductTransaction, BuyProductData from "transaction.graphql"
+#import ProductTransaction, BuyProductData, TopUpTransaction from "transaction.graphql"
 
 type Query {
   currentUser: User!
@@ -12,11 +12,11 @@ type Query {
 
 type Mutation {
   updateUser(data: UpdateInputData!): User!
-  topUp(amount: Int!): User!
   sendVerifyEmail: VerifyEmailToken!
   createProduct(data: CreateProductData!): Product!
   deleteProduct(id: ID!): String!
   updateProduct(data: UpdateProductData!): Product!
   buyProduct(data: BuyProductData!): ProductTransaction!
   acceptBuyProduct(transactionId: ID!): ProductTransaction!
+  topUp(amount: Int!): TopUpTransaction!
 }

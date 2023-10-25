@@ -14,6 +14,13 @@ type ProductTransaction implements Transaction {
   quantity: Int!
 }
 
+type TopUpTransaction implements Transaction {
+  id: ID!
+  userId: ID!
+  status: TransactionStatus!
+  amount: Int!
+}
+
 input BuyProductData {
   productId: ID!
   quantity: Int!
