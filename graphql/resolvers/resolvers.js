@@ -1,6 +1,6 @@
-const ProductResolver = require("./resolvers/product");
-const UserResolver = require("./resolvers/user");
-const TransactionResolver = require("./resolvers/transaction");
+const ProductResolver = require("./product");
+const UserResolver = require("./user");
+const TransactionResolver = require("./transaction");
 
 const resolvers = {
   currentUser: UserResolver.getCurrentUserData,
@@ -16,6 +16,7 @@ const resolvers = {
   buyProduct: TransactionResolver.buyProduct,
   acceptBuyProduct: TransactionResolver.acceptBuyProduct,
   topUp: TransactionResolver.topUp,
+  getTransactions: TransactionResolver.getTransactions,
 };
 
 module.exports = resolvers;

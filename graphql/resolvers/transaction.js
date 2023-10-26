@@ -79,6 +79,17 @@ class TransactionResolver {
 
     return transactionDoc;
   };
+
+  static getTransactions = async (obj, args, context, info) => {
+    const userId = args.user.id;
+    const productTranasction = await ProductTransaction.find({
+      $or: [{ buyerId: userId }, { sellerId: userId }],
+    });
+    const topUpTransaction = await TopUpTransaction.find({ userId: userId });
+    const transactions = productTranasction.concat(topUpTransaction);
+
+    return transactions;
+  };
 }
 
 module.exports = TransactionResolver;
